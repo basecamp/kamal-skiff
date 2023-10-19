@@ -1,0 +1,39 @@
+# Name of your site. Used to uniquely configure containers.
+service: my-site
+
+# Name of the container image.
+image: user/my-site
+
+# Deploy to these servers.
+servers:
+  - 192.168.0.1
+
+# Credentials for your image host.
+registry:
+  # Specify the registry server, if you're not using Docker Hub
+  # server: registry.digitalocean.com / ghcr.io / ...
+  username: my-user
+
+  # Always use an access token rather than real password when possible.
+  password:
+    - SKIFF_REGISTRY_PASSWORD
+
+# Inject GIT_URL into site container (secrets come from .env).
+# Remember to run `kamal env push` after making changes!
+env:
+  secret:
+    - GIT_URL
+
+# Use a different ssh user than root
+# ssh:
+#   user: app
+
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
+# hitting 404 on in-flight requests. Combines all files from new and old
+# version inside the asset_path.
+# asset_path: /rails/public/assets
+
+# Configure rolling deploys by setting a wait time between batches of restarts.
+# boot:
+#   limit: 10 # Can also specify as a percentage of total hosts, such as "25%"
+#   wait: 2

@@ -1,0 +1,2 @@
+module Skiff::Commands
+end

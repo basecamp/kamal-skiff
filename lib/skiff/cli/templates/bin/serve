@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+# Ensure GIT_URL is set
+if [[ -z "$GIT_URL" ]]; then
+    echo "GIT_URL is not set" >&2
+    exit 1
+fi
+
+polling_pull() {
+    while true; do
+        echo "Pulling latest code..."
+        git pull $GIT_URL
+        sleep 10
+    done
+}
+
+# Start function in the background
+polling_pull &
+
+# Start NGINX in the foreground
+nginx -g 'daemon off;'
