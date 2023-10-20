@@ -56,7 +56,7 @@ class Skiff::Cli < Thor
 
   desc "flush", "Flush etags after includes have changed (by touching all html files)"
   def flush
-    kamal_exec 'find /site/public -type f -name "*.html" ! \( -path \"/site/public/_*\" -o -path \"/site/public/assets/*\" \) -exec touch {} \;'
+    kamal_exec 'find /site/public -type f -name "*.html" -exec touch {} \;'
   end
 
   desc "restart", "Restart the nginx server with latest config/server.conf"
