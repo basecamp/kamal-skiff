@@ -8,7 +8,6 @@ class Skiff::Cli::Main < Skiff::Cli::Base
   source_root File.expand_path("templates", __dir__)
 
   desc "new", "Deploy app to servers"
-  option :skip_push, aliases: "-P", type: :boolean, default: false, desc: "Skip image build and push"
   def new(name)
     self.destination_root = File.expand_path(name)
 
@@ -32,6 +31,37 @@ class Skiff::Cli::Main < Skiff::Cli::Base
       run("git init && git add . && git commit -m 'New skiff site'")
     end
   end
+
+  desc "dev", "Start development server"
+  def dev
+    if File.exist?("Dockerfile")
+      puts "Starting #{site_name} on http://localhost:8080..."
+
+      docker "build -t #{site_name} ."
+      docker "run -it --rm -p 8080:80 -v ./public:/site/public --name #{site_name} #{site_name} nginx '-g daemon off;'"
+    else
+      puts "No Dockerfile found in current directory"
+    end
+  end
+
+  desc "go", "Deploy the site"
+  def go
+    kamal "setup"
+  end
+
+  desc "go", "Deploy the site to staging"
+  def stage
+    kamal "deploy -d staging"
+  end
+
+  desc "touch", "Touch templates after includes changed to flush etag caches"
+  def touch
+    # find /site/public -type f ! \( -path "/site/public/_*" -o -path "/site/public/assets/*" \) -exec touch {} \;
+  end
+
+  desc "restart", "Restart the nginx server to assume changes from config/server.conf"
+  def restart
+    kamal %(app exec --reuse '/bin/bash -c "nginx -t && nginx -s reload"')
   end
 
   desc "version", "Show Skiff version"
@@ -47,5 +77,17 @@ class Skiff::Cli::Main < Skiff::Cli::Base
 
     def keep_file(destination)
       create_file("#{destination}/.keep")
+    end
+
+    def site_name
+      @site_name ||= File.basename(Dir.pwd)
+    end
+
+    def docker(command)
+      system "docker #{command}"
+    end
+
+    def kamal(command)
+      system "kamal #{command}"
     end
 end
