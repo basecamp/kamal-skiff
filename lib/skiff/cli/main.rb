@@ -18,6 +18,10 @@ class Skiff::Cli::Main < Skiff::Cli::Base
     directory "config"
     directory "public"
 
+    copy_file "dotfiles/gitignore", ".gitignore"
+    copy_file "dotfiles/dockerignore", ".dockerignore"
+    copy_file "dotfiles/env", ".env"
+
     copy_file "Dockerfile"
 
     empty_directory_with_keep_file "assets/images"
