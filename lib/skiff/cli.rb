@@ -7,7 +7,7 @@ class Skiff::Cli < Thor
 
   source_root File.expand_path("templates", __dir__)
 
-  desc "new", "Deploy app to servers"
+  desc "new", "Create a new skiff site [NAME]"
   def new(name)
     self.destination_root = File.expand_path(name)
 
@@ -49,7 +49,7 @@ class Skiff::Cli < Thor
     kamal "setup"
   end
 
-  desc "go", "Deploy the site to staging"
+  desc "stage", "Deploy the site to staging"
   def stage
     kamal "deploy -d staging"
   end
@@ -59,7 +59,7 @@ class Skiff::Cli < Thor
     kamal_exec 'find /site/public -type f ! \( -path \"/site/public/_*\" -o -path \"/site/public/assets/*\" \) -exec touch {} \;'
   end
 
-  desc "restart", "Restart the nginx server to assume changes from config/server.conf"
+  desc "restart", "Restart the nginx server with latest config/server.conf"
   def restart
     kamal_exec "nginx -t && nginx -s reload"
   end
