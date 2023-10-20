@@ -54,9 +54,9 @@ class Skiff::Cli < Thor
     kamal "deploy -d staging"
   end
 
-  desc "touch", "Touch templates after includes changed to flush etag caches"
-  def touch
-    kamal_exec 'find /site/public -type f ! \( -path \"/site/public/_*\" -o -path \"/site/public/assets/*\" \) -exec touch {} \;'
+  desc "flush", "Flush etags after includes have changed (by touching all html files)"
+  def flush
+    kamal_exec 'find /site/public -type f -name "*.html" ! \( -path \"/site/public/_*\" -o -path \"/site/public/assets/*\" \) -exec touch {} \;'
   end
 
   desc "restart", "Restart the nginx server with latest config/server.conf"
