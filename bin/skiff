@@ -6,7 +6,7 @@ Thread.report_on_exception = false
 require "kamal-skiff"
 
 begin
-  Skiff::Cli::Main.start(ARGV)
+  Skiff::Cli.start(ARGV)
 rescue => e
   puts "  \e[31mERROR (#{e.class}): #{e.message}\e[0m"
   puts e.backtrace if ENV["VERBOSE"]

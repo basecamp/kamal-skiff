@@ -1,4 +1,5 @@
 module Skiff
 end
 
-require "skiff/cli/main"
+require "skiff/cli"
+require "skiff/version"
