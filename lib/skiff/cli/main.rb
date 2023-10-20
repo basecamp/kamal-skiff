@@ -12,9 +12,6 @@ class Skiff::Cli::Main < Skiff::Cli::Base
   def new(name)
     self.destination_root = File.expand_path(name)
 
-    directory "bin"
-    chmod "bin", 0755, verbose: false
-
     directory "config"
     directory "public"
 
