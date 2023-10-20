@@ -14,4 +14,4 @@ COPY . .
 # Configure nginx
 RUN echo 'include /site/config/server.conf;' > /etc/nginx/conf.d/default.conf
 
-CMD ["/site/bin/serve"]
+CMD ["/site/serve"]

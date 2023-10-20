@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+polling_pull() {
+  while true; do
+    echo "Pulling latest..."
+    git pull $GIT_URL $GIT_BRANCH
+    sleep 10
+  done
+}
+
+# When GIT_URL is set start polling in the background
+[[ "$GIT_URL" ]] && polling_pull &
+
+# Start NGINX in the foreground
+nginx -g 'daemon off;'
