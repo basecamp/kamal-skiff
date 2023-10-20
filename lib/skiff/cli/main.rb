@@ -13,7 +13,11 @@ class Skiff::Cli::Main < Skiff::Cli::Base
     self.destination_root = File.expand_path(name)
 
     directory "config"
+
     directory "public"
+    empty_directory_with_keep_file "public/assets/images"
+    empty_directory_with_keep_file "public/assets/javascripts"
+    empty_directory_with_keep_file "public/assets/stylesheets"
 
     copy_file "dotfiles/gitignore", ".gitignore"
     copy_file "dotfiles/dockerignore", ".dockerignore"
@@ -21,9 +25,6 @@ class Skiff::Cli::Main < Skiff::Cli::Base
 
     copy_file "Dockerfile"
 
-    empty_directory_with_keep_file "assets/images"
-    empty_directory_with_keep_file "assets/javascripts"
-    empty_directory_with_keep_file "assets/stylesheets"
   end
 
   desc "version", "Show Skiff version"
