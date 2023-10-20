@@ -25,6 +25,9 @@ class Skiff::Cli::Main < Skiff::Cli::Base
 
     copy_file "Dockerfile"
 
+    copy_file "serve"
+    chmod "serve", 0755, verbose: false
+    
   end
 
   desc "version", "Show Skiff version"
