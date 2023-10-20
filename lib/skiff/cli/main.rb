@@ -61,7 +61,12 @@ class Skiff::Cli::Main < Skiff::Cli::Base
 
   desc "restart", "Restart the nginx server to assume changes from config/server.conf"
   def restart
-    kamal %(app exec --reuse '/bin/bash -c "nginx -t && nginx -s reload"')
+    kamal_exec "nginx -t && nginx -s reload"
+  end
+
+  desc "refresh", "Pull latest changes from git"
+  def refresh
+    kamal_exec 'git checkout -f & git pull \$GIT_URL'
   end
 
   desc "version", "Show Skiff version"
@@ -89,5 +94,9 @@ class Skiff::Cli::Main < Skiff::Cli::Base
 
     def kamal(command)
       system "kamal #{command}"
+    end
+
+    def kamal_exec(commands)
+      kamal %(app exec --reuse '/bin/bash -c "#{commands}"')
     end
 end
