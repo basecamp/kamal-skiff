@@ -56,7 +56,7 @@ class Skiff::Cli::Main < Skiff::Cli::Base
 
   desc "touch", "Touch templates after includes changed to flush etag caches"
   def touch
-    # find /site/public -type f ! \( -path "/site/public/_*" -o -path "/site/public/assets/*" \) -exec touch {} \;
+    kamal_exec 'find /site/public -type f ! \( -path \"/site/public/_*\" -o -path \"/site/public/assets/*\" \) -exec touch {} \;'
   end
 
   desc "restart", "Restart the nginx server to assume changes from config/server.conf"
