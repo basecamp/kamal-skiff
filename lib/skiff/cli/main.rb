@@ -28,6 +28,10 @@ class Skiff::Cli::Main < Skiff::Cli::Base
     copy_file "serve"
     chmod "serve", 0755, verbose: false
     
+    inside(destination_root) do
+      run("git init && git add . && git commit -m 'New skiff site'")
+    end
+  end
   end
 
   desc "version", "Show Skiff version"
