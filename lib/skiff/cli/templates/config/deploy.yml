@@ -18,6 +18,10 @@ registry:
   password:
     - SKIFF_REGISTRY_PASSWORD
 
+# Check /up against 80
+healthcheck:
+  port: 80
+
 # Use GIT_URL from env if you want to auto-update site via git pulls.
 # Remember to run `kamal env push` after making changes!
 # env:
