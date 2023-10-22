@@ -29,6 +29,7 @@ class Skiff::Cli < Thor
     empty_directory_with_keep_file "public/assets/stylesheets"
 
     copy_file "Dockerfile"
+    template "README.md.tt", "README.md"
 
     copy_file "serve"
     chmod "serve", 0755, verbose: false
