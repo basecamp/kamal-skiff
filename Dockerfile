@@ -8,7 +8,7 @@ COPY --from=docker/buildx-bin /buildx /usr/libexec/docker/cli-plugins/docker-bui
 WORKDIR /skiff
 
 # Copy the Gemfile, Gemfile.lock into the container
-COPY Gemfile Gemfile.lock skiff.gemspec ./
+COPY Gemfile Gemfile.lock kamal-skiff.gemspec ./
 
 # Required in skiff.gemspec
 COPY lib/skiff/version.rb /skiff/lib/skiff/version.rb
@@ -25,8 +25,8 @@ RUN apk add --no-cache --update build-base git docker openrc openssh-client-defa
 COPY . .
 
 # Install the gem locally from the project folder
-RUN gem build skiff.gemspec && \
-    gem install ./skiff-*.gem --no-document
+RUN gem build kamal-skiff.gemspec && \
+    gem install ./kamal-skiff-*.gem --no-document
 
 # Tell git it's safe to access /workdir/.git even if
 # the directory is owned by a different user
