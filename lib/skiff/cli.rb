@@ -71,6 +71,12 @@ class Skiff::Cli < Thor
     kamal_exec 'git checkout -f & git pull \$GIT_URL'
   end
 
+  desc "logs", "Follow logs from server"
+  option :staging, aliases: "-s", type: :boolean, default: false, desc: "On staging server"
+  def logs
+    kamal "app logs -f"
+  end
+
   desc "version", "Show Skiff version"
   def version
     say Skiff::VERSION
