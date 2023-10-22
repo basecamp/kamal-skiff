@@ -48,26 +48,25 @@ class Skiff::Cli < Thor
   end
 
   desc "deploy", "Deploy the site"
+  option :staging, aliases: "-s", type: :boolean, default: false, desc: "On staging server"
   def deploy
     kamal "setup"
   end
 
-  desc "stage", "Deploy the site to staging"
-  def stage
-    kamal "deploy -d staging"
-  end
-
   desc "flush", "Flush etags after includes have changed (by touching all html files)"
+  option :staging, aliases: "-s", type: :boolean, default: false, desc: "On staging server"
   def flush
     kamal_exec 'find /site/public -type f -name "*.html" -exec touch {} \;'
   end
 
   desc "restart", "Restart the nginx server with latest config/server.conf"
+  option :staging, aliases: "-s", type: :boolean, default: false, desc: "On staging server"
   def restart
     kamal_exec "nginx -t && nginx -s reload"
   end
 
   desc "refresh", "Pull latest changes from git"
+  option :staging, aliases: "-s", type: :boolean, default: false, desc: "On staging server"
   def refresh
     kamal_exec 'git checkout -f & git pull \$GIT_URL'
   end
@@ -96,7 +95,7 @@ class Skiff::Cli < Thor
     end
 
     def kamal(command)
-      system "kamal #{command}"
+      system "kamal #{command} #{options[:staging] ? "-d staging" : ""}".strip
     end
 
     def kamal_exec(commands)
