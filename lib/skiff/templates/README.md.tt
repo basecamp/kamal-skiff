@@ -32,7 +32,7 @@ Then you must also setup an access token for your Docker image repository (see [
 
 Finally, you must add the server address into `config/deploy.yml`, and ensure that the image and repository configurations are correct.
 
-Now you're ready to run `skiff go` to deploy your site to the server. This will install Docker on your server (using `apt-get`), if it isn't already available.
+Now you're ready to run `skiff deploy` to deploy your site to the server. This will install Docker on your server (using `apt-get`), if it isn't already available.
 
 ## Flushing etag caches after changing include files
 

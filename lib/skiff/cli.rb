@@ -47,8 +47,8 @@ class Skiff::Cli < Thor
     end
   end
 
-  desc "go", "Deploy the site"
-  def go
+  desc "deploy", "Deploy the site"
+  def deploy
     kamal "setup"
   end
 
