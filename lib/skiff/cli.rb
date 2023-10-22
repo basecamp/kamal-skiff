@@ -33,10 +33,6 @@ class Skiff::Cli < Thor
 
     copy_file "serve"
     chmod "serve", 0755, verbose: false
-    
-    inside(destination_root) do
-      run("git init && git add . && git commit -m 'New skiff site'")
-    end
   end
 
   desc "dev", "Start development server"
