@@ -28,6 +28,9 @@ COPY . .
 RUN gem build kamal-skiff.gemspec && \
     gem install ./kamal-skiff-*.gem --no-document
 
+# Set the working directory to /workdir
+WORKDIR /workdir
+
 # Tell git it's safe to access /workdir/.git even if
 # the directory is owned by a different user
 RUN git config --global --add safe.directory /workdir
