@@ -65,7 +65,7 @@ class Skiff::Cli < Thor
     kamal_exec "nginx -t && nginx -s reload"
   end
 
-  desc "refresh", "Pull latest changes from git"
+  desc "refresh", "Force pull latest changes from git"
   option :staging, aliases: "-s", type: :boolean, default: false, desc: "On staging server"
   def refresh
     kamal_exec 'git checkout -f & git pull \$GIT_URL'
