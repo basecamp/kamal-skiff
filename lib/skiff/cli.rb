@@ -7,20 +7,26 @@ class Skiff::Cli < Thor
 
   source_root File.expand_path("templates", __dir__)
 
-  desc "new", "Create a new skiff site [NAME]"
-  def new(name)
-    self.destination_root = File.expand_path(name)
+  desc "new", "Create a new skiff site [SITE_NAME]"
+  def new(site_name)
+    self.destination_root = File.expand_path(site_name)
 
-    directory "config"
+    @site_name = site_name
+    @user_name = `whoami`.strip
+
+    template  "dotfiles/env.tt", ".env"
+    copy_file "dotfiles/gitignore", ".gitignore"
+    copy_file "dotfiles/dockerignore", ".dockerignore"
+
+    empty_directory "config"
+    template  "config/deploy.yml.tt", "config/deploy.yml"
+    copy_file "config/deploy.staging.yml", "config/deploy.staging.yml"
+    copy_file "config/server.conf", "config/server.conf"
 
     directory "public"
     empty_directory_with_keep_file "public/assets/images"
     empty_directory_with_keep_file "public/assets/javascripts"
     empty_directory_with_keep_file "public/assets/stylesheets"
-
-    copy_file "dotfiles/gitignore", ".gitignore"
-    copy_file "dotfiles/dockerignore", ".dockerignore"
-    copy_file "dotfiles/env", ".env"
 
     copy_file "Dockerfile"
 

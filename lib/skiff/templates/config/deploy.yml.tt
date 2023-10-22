@@ -1,8 +1,8 @@
 # Name of your site. Used to uniquely configure containers.
-service: my-site
+service: <%= @site_name %>
 
 # Name of the container image.
-image: user/my-site
+image: <%= @user_name %>/<%= @site_name %>
 
 # Deploy to these servers.
 servers:
@@ -12,7 +12,7 @@ servers:
 registry:
   # Specify the registry server, if you're not using Docker Hub
   # server: registry.digitalocean.com / ghcr.io / ...
-  username: my-user
+  username: <%= @user_name %>
 
   # Always use an access token rather than real password when possible.
   password:
