@@ -43,7 +43,7 @@ class Skiff::Cli < Thor
       docker "build -t #{site_name} ."
       docker "run -it --rm -p 8080:80 -v ./public:/site/public --name #{site_name} #{site_name} nginx '-g daemon off;'"
     else
-      puts "No Dockerfile found in current directory"
+      say "No Dockerfile found in current directory", :red
     end
   end
 
@@ -74,7 +74,7 @@ class Skiff::Cli < Thor
 
   desc "version", "Show Skiff version"
   def version
-    puts Skiff::VERSION
+    say Skiff::VERSION
   end
 
   private
