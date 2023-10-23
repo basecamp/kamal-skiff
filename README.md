@@ -18,12 +18,6 @@ alias skiff="docker run -it --rm -v '${PWD}:/workdir' -v '/run/host-services/ssh
 
 Then run `skiff dev` to start the development server.
 
-## Deploying changes to production (or staging)
-
-Changes checked into git are automatically pulled onto the Skiff server every 10 seconds. So all you have to do is checkin your changes and push them.
-
-If you need to change the nginx configuration in `config/server.conf`, make your changes to that file, check them into git and push, and then run `skiff restart` to test the configuration file and restart the server if it's valid.
-
 ## Deploying the site for the first time
 
 First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in the `.env` file. This access token must have access to pull from the git repository in question (see [personal access tokens for GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) for an example).
@@ -33,6 +27,16 @@ Then you must also setup an access token for your Docker image repository (see [
 Finally, you must add the server address into `config/deploy.yml`, and ensure that the image and repository configurations are correct.
 
 Now you're ready to run `skiff deploy` to deploy your site to the server. This will install Docker on your server (using `apt-get`), if it isn't already available.
+
+## Deploying changes to production
+
+Changes checked into git are automatically pulled onto the Skiff server every 10 seconds. So all you have to do is checkin your changes and push them.
+
+If you need to change the nginx configuration in `config/server.conf`, make your changes to that file, check them into git and push, and then run `skiff restart` to test the configuration file and restart the server if it's valid.
+
+## Deploying changes to staging first
+
+To use a staging server, you must set `GIT_BRANCH` in .env to the branch you're using for staging. Then you can deploy the site to a staging server using `skiff deploy --staging`, which will use the configuration in `config/deploy.staging.yml`, and start pulling updates from the branch specified.
 
 ## Flushing etag caches after changing include files
 
