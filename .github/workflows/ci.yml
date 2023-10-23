@@ -1,0 +1,31 @@
+name: CI
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  tests:
+    strategy:
+      matrix:
+        ruby-version:
+          - "3.2"
+        gemfile:
+          - Gemfile
+        continue-on-error: [false]
+    name: ${{ format('Tests (Ruby {0})', matrix.ruby-version) }}
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.continue-on-error }}
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Run tests
+        run: bin/test
