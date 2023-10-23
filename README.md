@@ -10,13 +10,16 @@ If you have a Ruby environment available, you can install Skiff globally with:
 gem install kamal-skiff
 ```
 
+Then run `skiff dev` to start the development server.
+
 ...otherwise, you can run a dockerized version via an alias (add this to your .bashrc or similar to simplify re-use). On macOS, use:
 
 ```sh
-alias skiff="docker run -it --rm -v '${PWD}:/workdir' -v '/run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock' -e SSH_AUTH_SOCK='/run/host-services/ssh-auth.sock' -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest"
+alias skiff-dev="docker build -t skiff-site . && docker run -it --rm -p 8080:80 -v ./public:/site/public --name skiff-site skiff-site nginx '-g daemon off;'"
+alias skiff="docker run -it --rm -v '${PWD}:/workdir' -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock -e SSH_AUTH_SOCK='/run/host-services/ssh-auth.sock' -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest"
 ```
 
-Then run `skiff dev` to start the development server.
+Then run `skiff-dev` to start the development server, and use `skiff [command]` for everything else.
 
 ## Deploying the site for the first time
 
