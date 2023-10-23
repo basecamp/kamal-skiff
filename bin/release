@@ -9,6 +9,6 @@ git commit -m "Bump version for $VERSION"
 git push
 git tag v$VERSION
 git push --tags
-gem build skiff.gemspec
+gem build kamal-skiff.gemspec
 gem push "kamal-skiff-$VERSION.gem" --host https://rubygems.org
 rm "kamal-skiff-$VERSION.gem"
