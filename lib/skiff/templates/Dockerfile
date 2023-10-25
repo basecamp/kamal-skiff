@@ -8,10 +8,10 @@ RUN apt-get update -qq && \
 # Site lives here
 WORKDIR /site
 
-# Copy site
-COPY . .
-
 # Configure nginx
 RUN echo 'include /site/config/server.conf;' > /etc/nginx/conf.d/default.conf
+
+# Copy site
+COPY --link . .
 
 CMD ["/site/serve"]
