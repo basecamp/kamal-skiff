@@ -4,6 +4,7 @@ set -e
 polling_pull() {
   while true; do
     echo "Pulling latest..."
+    git checkout -f || true
     git pull $GIT_URL $GIT_BRANCH || true
     sleep 10
   done
