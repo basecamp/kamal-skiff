@@ -8,6 +8,12 @@ image: <%= @user_name %>/<%= @site_name %>
 servers:
   - 192.168.0.1
 
+# Use GIT_URL from env to auto-update site via git pulls.
+# Remember to run `kamal env push` after making changes!
+env:
+  secret:
+    - GIT_URL
+
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
@@ -21,12 +27,6 @@ registry:
 # Check /up against 80
 healthcheck:
   port: 80
-
-# Use GIT_URL from env if you want to auto-update site via git pulls.
-# Remember to run `kamal env push` after making changes!
-# env:
-#   secret:
-#     - GIT_URL
 
 # Use a different ssh user than root
 # ssh:
