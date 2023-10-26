@@ -2,6 +2,8 @@
 
 Skiff uses [Kamal](https://kamal-deploy.org) to deploy static sites using nginx with Server-Side Includes (SSI).
 
+Understand the why and the how in this introduction video: https://www.youtube.com/watch?v=YoabUEzpM6k
+
 ## Local development
 
 If you have a Ruby environment available, you can install Skiff globally with:
