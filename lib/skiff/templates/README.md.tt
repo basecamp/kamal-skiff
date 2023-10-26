@@ -1,6 +1,6 @@
 # <%= @site_name.capitalize %>
 
-This site is managed by [Skiff](https://kamal-deploy.org/skiff).
+This site is managed by [Skiff](https://github.com/basecamp/kamal-skiff).
 
 ## Local development
 
