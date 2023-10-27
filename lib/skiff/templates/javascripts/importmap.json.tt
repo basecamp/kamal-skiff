@@ -1,0 +1,15 @@
+{
+  "imports": {
+    <%- unless @skip_hotwire -%>
+    "application": "/assets/javascripts/application.js",
+    "@hotwired/turbo": "https://ga.jspm.io/npm:@hotwired/turbo@7.3.0/dist/turbo.es2017-esm.js",
+    "@hotwired/stimulus": "https://ga.jspm.io/npm:@hotwired/stimulus@3.2.2/dist/stimulus.js",
+    "@hotwired/stimulus-loading": "/assets/javascripts/controllers/stimulus-loading.js",
+    
+    "controllers": "/assets/javascripts/controllers/index.js",
+    "controllers/application": "/assets/javascripts/controllers/application.js",
+    
+    "controllers/hello_controller": "/assets/javascripts/controllers/hello_controller.js"
+    <%- end -%>
+  }
+}

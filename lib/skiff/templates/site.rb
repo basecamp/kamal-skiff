@@ -12,6 +12,15 @@ empty_directory_with_keep_file "public/assets/images"
 empty_directory_with_keep_file "public/assets/javascripts"
 empty_directory_with_keep_file "public/assets/stylesheets"
 
+unless @skip_javascript
+  template "javascripts/importmap.json.tt", "public/assets/javascripts/importmap.json"
+end
+
+unless @skip_hotwire
+  directory "javascripts/hotwire", "public/assets/javascripts"
+  get "https://raw.githubusercontent.com/hotwired/stimulus-rails/main/app/assets/javascripts/stimulus-loading.js", "public/assets/javascripts/controllers/stimulus-loading.js"
+end
+
 copy_file "Dockerfile"
 template "README.md.tt", "README.md"
 

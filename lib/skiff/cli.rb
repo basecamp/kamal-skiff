@@ -8,11 +8,16 @@ class Skiff::Cli < Thor
   source_root File.expand_path("templates", __dir__)
 
   desc "new", "Create a new skiff site [SITE_NAME]"
+  option :skip_javascript, type: :boolean, desc: "Skip JavaScript files"
+  option :skip_hotwire, type: :boolean, desc: "Skip Hotwire integration"
   def new(site_name)
     self.destination_root = File.expand_path(site_name)
 
     @site_name = site_name
     @user_name = `whoami`.strip
+    
+    @skip_javascript = options[:skip_javascript]
+    @skip_hotwire = @skip_javascript ? true : options[:skip_hotwire]
 
     eval File.read(File.join(File.dirname(__FILE__), "templates/site.rb"))
   end

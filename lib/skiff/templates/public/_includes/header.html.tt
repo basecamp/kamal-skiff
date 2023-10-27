@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <title><!--# echo var="title" --></title>
+  <%- unless @skip_javascript %>
+  <script type="importmap" data-turbo-track="reload">
+    <!--# include file="/assets/javascripts/importmap.json" -->
+  </script>
+  <%- end -%>
+  <%- unless @skip_hotwire %>
+  <link rel="modulepreload" href="/assets/javascripts/application.js">
+  <script type="module">import "application"</script>
+  <%- end -%>
+</head>
+<body>
