@@ -18,7 +18,7 @@ Then run `skiff dev` to start the development server.
 
 ```sh
 alias skiff-dev="docker build -t skiff-site . && docker run -it --rm -p 4000:80 -v ./public:/site/public --name skiff-site skiff-site nginx '-g daemon off;'"
-alias skiff="docker run -it --rm -v '${PWD}:/workdir' -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock -e SSH_AUTH_SOCK='/run/host-services/ssh-auth.sock' -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest"
+alias skiff='docker run -it --rm -v "${PWD}:/workdir" -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock -e SSH_AUTH_SOCK="/run/host-services/ssh-auth.sock" -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest'
 ```
 
 Then run `skiff-dev` to start the development server, and use `skiff [command]` for everything else.
