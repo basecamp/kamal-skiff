@@ -1,2 +1,3 @@
 # Ignore env file
 /.env
+/.git
