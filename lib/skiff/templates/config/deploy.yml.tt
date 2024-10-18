@@ -14,6 +14,10 @@ env:
   secret:
     - GIT_URL
 
+proxy:
+  healthcheck:
+    path: /up.html
+
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
@@ -24,9 +28,9 @@ registry:
   password:
     - SKIFF_REGISTRY_PASSWORD
 
-# Check /up against 80
-healthcheck:
-  port: 80
+# Configure builder setup.
+builder:
+  arch: amd64
 
 # Use a different ssh user than root
 # ssh:

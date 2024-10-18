@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["lib/**/*", "MIT-LICENSE", "README.md"]
   spec.executables = %w[ skiff ]
 
-  spec.add_dependency "kamal", ">= 1.0"
+  spec.add_dependency "kamal", ">= 2.0"
   spec.add_dependency "thor", "~> 1.2"
 
   spec.add_development_dependency "debug"
