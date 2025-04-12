@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+git_init() {
+  git clone --bare $GIT_URL .git
+  git config --unset core.bare
+}
+
 polling_pull() {
   while true; do
     echo "Pulling latest..."
@@ -11,7 +16,7 @@ polling_pull() {
 }
 
 # When GIT_URL is set start polling in the background
-[[ "$GIT_URL" ]] && polling_pull &
+[[ "$GIT_URL" ]] && git_init && polling_pull &
 
 # Start NGINX in the foreground
 nginx -g 'daemon off;'
