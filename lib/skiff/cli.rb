@@ -22,7 +22,7 @@ class Skiff::Cli < Thor
     if File.exist?("Dockerfile")
       puts "Starting #{site_name} on http://localhost:4000..."
 
-      docker "build -t #{site_name} ."
+      docker "build --load -t #{site_name} ."
       docker "run -it --rm -p 4000:80 -v ./public:/site/public --name #{site_name} #{site_name} nginx '-g daemon off;'"
     else
       say "No Dockerfile found in current directory", :red
