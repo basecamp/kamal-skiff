@@ -1,2 +1,5 @@
 # Ignore env file
 /.env
+
+# Ignore git directory (clone fresh at runtime to avoid layer caching issues)
+/.git

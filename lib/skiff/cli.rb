@@ -50,7 +50,7 @@ class Skiff::Cli < Thor
   desc "refresh", "Force pull latest changes from git"
   option :staging, aliases: "-s", type: :boolean, default: false, desc: "On staging server"
   def refresh
-    kamal_exec 'git checkout -f & git pull \$GIT_URL'
+    kamal_exec 'cd /tmp/repo && git fetch --depth 1 origin ${GIT_BRANCH:-HEAD} && git reset --hard FETCH_HEAD && rsync -a --delete --exclude=config/ --exclude=serve /tmp/repo/ /site/'
   end
 
   desc "logs", "Follow logs from server"

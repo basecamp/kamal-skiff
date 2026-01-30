@@ -25,7 +25,31 @@ Then run `skiff-dev` to start the development server, and use `skiff [command]` 
 
 ## Deploying the site for the first time
 
-First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in the `.env` file. This access token must have access to pull from the git repository in question (see [personal access tokens for GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) for an example).
+First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in the `.env` file. This access token must have access to pull from the git repository in question.
+
+### Creating a GitHub access token
+
+1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens**
+   - Direct link: https://github.com/settings/tokens?type=beta
+
+2. Click **Generate new token** and configure:
+   - **Token name**: A descriptive name (e.g., `mysite-deploy`)
+   - **Expiration**: Choose an appropriate duration
+   - **Repository access**: Select "Only select repositories" → choose your site's repository
+   - **Permissions**: Repository permissions → **Contents**: `Read-only`
+
+3. Click **Generate token** and copy the value
+
+4. Store the token in 1Password:
+   - Use the **Deploy** vault
+   - Create or update an item for your site (e.g., `mysite.do`)
+   - Add the token as a field named `GITHUB_TOKEN`
+
+5. Update your `.kamal/secrets` to fetch from 1Password and build the `GIT_URL`:
+   ```bash
+   GITHUB_TOKEN=$(kamal secrets extract GITHUB_TOKEN ${SECRETS})
+   GIT_URL=https://${GITHUB_TOKEN}:@github.com/username/repo.git
+   ```
 
 Then you must also setup an access token for your Docker image repository (see [Create and manage access tokens for Docker Hub](https://docs.docker.com/security/for-developers/access-tokens/) for an example).
 

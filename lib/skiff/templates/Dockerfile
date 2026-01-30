@@ -1,8 +1,8 @@
 FROM nginx:latest
 
-# Install git to provide polling updates
+# Install git and rsync to provide polling updates
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y git && \
+    apt-get install --no-install-recommends -y git rsync && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Site lives here
