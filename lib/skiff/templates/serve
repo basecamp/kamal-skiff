@@ -13,15 +13,18 @@ polling_clone() {
 
     # Clone/fetch into a temp directory with minimal history
     if [ -d "$REPO_DIR/.git" ]; then
+      # Subsequent run
       cd $REPO_DIR
       git fetch --depth 1 origin ${GIT_BRANCH:-HEAD}
       git reset --hard FETCH_HEAD
     else
+      # First run
       rm -rf $REPO_DIR
       git clone --depth 1 ${GIT_BRANCH:+--branch $GIT_BRANCH} $GIT_URL $REPO_DIR
     fi
 
     # Sync site files (excluding config which is already in the image)
+    # Changes in config/ or serve require a "skiff deploy"
     rsync -a --delete --exclude='config/' --exclude='serve' $REPO_DIR/ $SITE_DIR/
 
     sleep 10
