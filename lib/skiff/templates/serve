@@ -16,7 +16,7 @@ polling_clone() {
   sleep 5  # Wait for nginx
 
   while true; do
-    log "Fetching latest..."
+    log "Fetching ${GIT_BRANCH:-HEAD}..."
 
     if [ -d "$REPO_DIR/.git" ]; then
       # Subsequent runs: fetch and check for changes
