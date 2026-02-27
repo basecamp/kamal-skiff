@@ -1,17 +1,56 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
-polling_pull() {
+REPO_DIR=/tmp/repo
+SITE_DIR=/site
+
+log() {
+  if [ $# -gt 0 ]; then
+    echo "⛵ [skiff] $*"
+  else
+    sed 's/^/⛵ [skiff] /'
+  fi
+}
+
+polling_clone() {
+  sleep 5  # Wait for nginx
+
   while true; do
-    echo "Pulling latest..."
-    git checkout -f || true
-    git pull $GIT_URL $GIT_BRANCH || true
+    if poll; then
+      log "Synced."
+    else
+      log "Error during poll, will retry..."
+    fi
+
     sleep 10
   done
 }
 
-# When GIT_URL is set start polling in the background
-[[ "$GIT_URL" ]] && polling_pull &
+poll() {
+  log "Fetching ${GIT_BRANCH:-HEAD}..."
 
-# Start NGINX in the foreground
+  if [ -d "$REPO_DIR/.git" ]; then
+    # Subsequent runs: fetch and check for changes
+    cd "$REPO_DIR"
+    OLD_HEAD=$(git rev-parse HEAD)
+    git fetch --depth 1 origin "${GIT_BRANCH:-HEAD}" 2>&1 | log
+
+    # Skip sync if no changes
+    if [ "$OLD_HEAD" = "$(git rev-parse FETCH_HEAD)" ]; then
+      log "Already up to date."
+      return 0
+    fi
+    git reset --hard FETCH_HEAD 2>&1 | log
+  else
+    # First run: shallow clone
+    rm -rf "$REPO_DIR"
+    git clone --depth 1 ${GIT_BRANCH:+--branch "$GIT_BRANCH"} "$GIT_URL" "$REPO_DIR" 2>&1 | log
+  fi
+
+  # Sync to site (changes in config/ or serve require "skiff deploy")
+  rsync -a --delete --exclude='config/' --exclude='serve' "$REPO_DIR/" "$SITE_DIR/"
+}
+
+# Start polling in background if GIT_URL is set
+[[ "$GIT_URL" ]] && polling_clone &
 nginx -g 'daemon off;'
