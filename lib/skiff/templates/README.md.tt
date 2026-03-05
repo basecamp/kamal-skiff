@@ -13,14 +13,14 @@ gem install kamal-skiff
 ...otherwise, you can run a dockerized version via an alias (add this to your .bashrc or similar to simplify re-use). On macOS, use:
 
 ```sh
-alias skiff="docker run -it --rm -v '${PWD}:/workdir' -v '/run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock' -e SSH_AUTH_SOCK='/run/host-services/ssh-auth.sock' -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest"
+alias skiff='docker run -it --rm -v "${PWD}:/workdir" -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock -e SSH_AUTH_SOCK="/run/host-services/ssh-auth.sock" -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest'
 ```
 
 Then run `skiff dev` to start the development server.
 
 ## Deploying changes to production (or staging)
 
-Changes checked into git are automatically pulled onto the Skiff server every 10 seconds. So all you have to do is checkin your changes and push them.
+Changes checked into git are automatically pulled onto the Skiff server every 10 seconds. So all you have to do is check in your changes and push them.
 
 If you need to change the nginx configuration in `config/server.conf`, make your changes to that file, check them into git and push, and then run `skiff restart` to test the configuration file and restart the server if it's valid.
 
