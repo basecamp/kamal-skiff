@@ -1,4 +1,5 @@
-template  "dotfiles/env.tt", ".env"
+empty_directory ".kamal"
+template  "dotfiles/kamal-secrets.tt", ".kamal/secrets"
 copy_file "dotfiles/gitignore", ".gitignore"
 copy_file "dotfiles/dockerignore", ".dockerignore"
 

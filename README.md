@@ -25,7 +25,9 @@ Then run `skiff-dev` to start the development server, and use `skiff [command]` 
 
 ## Deploying the site for the first time
 
-First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in the `.env` file. This access token must have access to pull from the git repository in question.
+If you're upgrading an existing site from Kamal 1, run `kamal upgrade` once (and `kamal upgrade -d staging` for staging) before your next `skiff deploy`.
+
+First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in `.kamal/secrets`. This access token must have access to pull from the git repository in question.
 
 ### Creating a GitHub access token
 
@@ -51,9 +53,9 @@ First ensure that you've set `GIT_URL` to a repository address with a valid acce
    GIT_URL=https://${GITHUB_TOKEN}:@github.com/username/repo.git
    ```
 
-Then you must also setup an access token for your Docker image repository (see [Create and manage access tokens for Docker Hub](https://docs.docker.com/security/for-developers/access-tokens/) for an example).
+Kamal 2 uses a local registry by default (`registry.server: localhost:5555`), so you do not need to configure remote registry credentials unless you change that setting.
 
-Finally, you must add the server address into `config/deploy.yml`, and ensure that the image and repository configurations are correct.
+Finally, you must add the server address into `config/deploy.yml`, and ensure that the image configuration is correct.
 
 Now you're ready to run `skiff deploy` to deploy your site to the server. This will install Docker on your server (using `apt-get`), if it isn't already available.
 
@@ -65,7 +67,7 @@ If you need to change the nginx configuration in `config/server.conf`, make your
 
 ## Deploying changes to staging first
 
-To use a staging server, you must set `GIT_BRANCH` in .env to the branch you're using for staging. Then you can deploy the site to a staging server using `skiff deploy --staging`, which will use the configuration in `config/deploy.staging.yml`, and start pulling updates from the branch specified.
+To use a staging server, set `GIT_BRANCH` in `config/deploy.staging.yml` under `env.clear` to the branch you're using for staging. Then you can deploy the site to a staging server using `skiff deploy --staging`, which will use the configuration in `config/deploy.staging.yml`, and start pulling updates from the branch specified.
 
 ## Flushing etag caches after changing include files
 

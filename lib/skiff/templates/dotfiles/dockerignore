@@ -1,4 +1,5 @@
-# Ignore env file
+# Ignore local secrets
+/.kamal/secrets*
 /.env
 
 # Ignore git directory (clone fresh at runtime to avoid layer caching issues)

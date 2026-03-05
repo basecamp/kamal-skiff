@@ -1,2 +1,2 @@
-# Ignore env file
+/.kamal/secrets*
 /.env
