@@ -61,7 +61,7 @@ Now you're ready to run `skiff deploy` to deploy your site to the server. This w
 
 Changes checked into git are automatically pulled onto the Skiff server every 10 seconds. So all you have to do is check in your changes and push them.
 
-If you need to change the nginx configuration in `config/server.conf`, make your changes to that file, check them into git and push, and then run `skiff restart` to test the configuration file and restart the server if it's valid.
+If you need to change the nginx configuration in `config/server.conf`, make your changes to that file, check them into git, and push. Skiff will detect the update, validate the new config, and reload nginx automatically.
 
 ## Deploying changes to staging first
 
