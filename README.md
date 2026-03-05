@@ -53,9 +53,9 @@ First ensure that you've set `GIT_URL` to a repository address with a valid acce
    GIT_URL=https://${GITHUB_TOKEN}:@github.com/username/repo.git
    ```
 
-Then you must also setup an access token for your Docker image repository (see [Create and manage access tokens for Docker Hub](https://docs.docker.com/security/for-developers/access-tokens/) for an example).
+Kamal 2 uses a local registry by default (`registry.server: localhost:5555`), so you do not need to configure remote registry credentials unless you change that setting.
 
-Finally, you must add the server address into `config/deploy.yml`, and ensure that the image and repository configurations are correct.
+Finally, you must add the server address into `config/deploy.yml`, and ensure that the image configuration is correct.
 
 Now you're ready to run `skiff deploy` to deploy your site to the server. This will install Docker on your server (using `apt-get`), if it isn't already available.
 
