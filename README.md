@@ -4,60 +4,62 @@ Skiff uses [Kamal](https://kamal-deploy.org) to deploy static sites using nginx 
 
 Understand the why and the how in this introduction video: https://www.youtube.com/watch?v=YoabUEzpM6k
 
-## Local development
+## Setting up your first Skiff site
 
-If you have a Ruby environment available, you can install Skiff globally with:
+1. Create a new site scaffold and enter the project:
+   ```sh
+   skiff new mysite
+   cd mysite
+   ```
 
-```sh
-gem install kamal-skiff
-```
+2. Add your site files under `public/` (for example, `public/index.html` and includes in `public/_includes/`).
 
-Then run `skiff dev` to start the development server.
+3. Put the site in a Git repository and push it to GitHub, since the server auto-pulls from git:
+   ```sh
+   git init
+   git add .
+   git commit -m "Initial site"
+   git branch -M master
+   git remote add origin git@github.com:username/repo.git
+   git push -u origin master
+   ```
 
-...otherwise, you can run a dockerized version via an alias (add this to your .bashrc or similar to simplify re-use). On macOS, use:
-
-```sh
-alias skiff-dev="docker build -t skiff-site . && docker run -it --rm -p 4000:80 -v ./public:/site/public --name skiff-site skiff-site nginx '-g daemon off;'"
-alias skiff='docker run -it --rm -v "${PWD}:/workdir" -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock -e SSH_AUTH_SOCK="/run/host-services/ssh-auth.sock" -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/basecamp/kamal-skiff:latest'
-```
-
-Then run `skiff-dev` to start the development server, and use `skiff [command]` for everything else.
-
-## Deploying the site for the first time
-
-If you're upgrading an existing site from Kamal 1, run `kamal upgrade` once (and `kamal upgrade -d staging` for staging) before your next `skiff deploy`.
-
-First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in `.kamal/secrets`. This access token must have access to pull from the git repository in question.
-
-### Creating a GitHub access token
-
-1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens**
-   - Direct link: https://github.com/settings/tokens?type=beta
-
-2. Click **Generate new token** and configure:
-   - **Token name**: A descriptive name (e.g., `mysite-deploy`)
-   - **Expiration**: Choose an appropriate duration
-   - **Repository access**: Select "Only select repositories" → choose your site's repository
-   - **Permissions**: Repository permissions → **Contents**: `Read-only`
-
-3. Click **Generate token** and copy the value
-
-4. Store the token in 1Password:
-   - Use the **Deploy** vault
-   - Create or update an item for your site (e.g., `mysite.do`)
-   - Add the token as a field named `GITHUB_TOKEN`
-
-5. Update your `.kamal/secrets` to fetch from 1Password and build the `GIT_URL`:
+4. Set `GIT_URL` in `.kamal/secrets` so the server can pull your repository (relying on ENV GITHUB_TOKEN):
    ```bash
-   GITHUB_TOKEN=$(kamal secrets extract GITHUB_TOKEN ${SECRETS})
    GIT_URL=https://x-access-token:${GITHUB_TOKEN}@github.com/username/repo.git
    ```
 
+### If you need to create a GitHub access token
+
+- Go to **GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens**.
+  - Direct link: https://github.com/settings/tokens?type=beta
+- Click **Generate new token** and configure:
+  - **Token name**: A descriptive name (e.g., `mysite-deploy`)
+  - **Expiration**: Choose an appropriate duration
+  - **Repository access**: Select "Only select repositories" → choose your site's repository
+  - **Permissions**: Repository permissions → **Contents**: `Read-only`
+- Click **Generate token** and copy the value.
+- Store the token in 1Password:
+  - Use the **Deploy** vault
+  - Create or update an item for your site (e.g., `mysite.do`)
+  - Add the token as a field named `GITHUB_TOKEN`
+
+5. Update `config/deploy.yml` with your server address in `servers` and confirm the `image` name.
+
 Kamal 2 uses a local registry by default (`registry.server: localhost:5555`), so you do not need to configure remote registry credentials unless you change that setting.
 
-Finally, you must add the server address into `config/deploy.yml`, and ensure that the image configuration is correct.
+6. Deploy your site:
+   ```sh
+   skiff deploy
+   ```
 
-Now you're ready to run `skiff deploy` to deploy your site to the server. This will install Docker on your server (using `apt-get`), if it isn't already available.
+   This will install Docker on your server (using `apt-get`) if it is not already available.
+
+If you're upgrading an existing site from Kamal 1, run `kamal upgrade` once (and `kamal upgrade -d staging` for staging) before your next `skiff deploy`.
+
+## Local development
+
+Run `skiff dev` to start the development server on localhost:4000.
 
 ## Deploying changes to production
 
