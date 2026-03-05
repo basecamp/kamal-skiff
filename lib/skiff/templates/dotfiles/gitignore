@@ -1,3 +1,2 @@
-# Ignore local secrets
 /.kamal/secrets*
 /.env
