@@ -26,7 +26,9 @@ If you need to change the nginx configuration in `config/server.conf`, make your
 
 ## Deploying the site for the first time
 
-First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in the `.env` file. This access token must have access to pull from the git repository in question (see [personal access tokens for GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) for an example).
+If this site was originally deployed with Kamal 1, run `kamal upgrade` once (and `kamal upgrade -d staging` for staging) before your next `skiff deploy`.
+
+First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in `.kamal/secrets`. This access token must have access to pull from the git repository in question (see [personal access tokens for GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) for an example).
 
 Then you must also setup an access token for your Docker image repository (see [Create and manage access tokens for Docker Hub](https://docs.docker.com/security/for-developers/access-tokens/) for an example).
 

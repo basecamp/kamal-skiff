@@ -8,8 +8,7 @@ image: <%= @user_name %>/<%= @site_name %>
 servers:
   - 192.168.0.1
 
-# Use GIT_URL from env to auto-update site via git pulls.
-# Remember to run `kamal env push` after making changes!
+# Use GIT_URL from secrets to auto-update site via git pulls.
 env:
   secret:
     - GIT_URL
@@ -24,9 +23,9 @@ registry:
   password:
     - SKIFF_REGISTRY_PASSWORD
 
-# Check /up against 80
-healthcheck:
-  port: 80
+proxy:
+  healthcheck:
+    path: /up
 
 # Use a different ssh user than root
 # ssh:

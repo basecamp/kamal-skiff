@@ -25,7 +25,9 @@ Then run `skiff-dev` to start the development server, and use `skiff [command]` 
 
 ## Deploying the site for the first time
 
-First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in the `.env` file. This access token must have access to pull from the git repository in question.
+If you're upgrading an existing site from Kamal 1, run `kamal upgrade` once (and `kamal upgrade -d staging` for staging) before your next `skiff deploy`.
+
+First ensure that you've set `GIT_URL` to a repository address with a valid access token embedded in `.kamal/secrets`. This access token must have access to pull from the git repository in question.
 
 ### Creating a GitHub access token
 
@@ -65,7 +67,7 @@ If you need to change the nginx configuration in `config/server.conf`, make your
 
 ## Deploying changes to staging first
 
-To use a staging server, you must set `GIT_BRANCH` in .env to the branch you're using for staging. Then you can deploy the site to a staging server using `skiff deploy --staging`, which will use the configuration in `config/deploy.staging.yml`, and start pulling updates from the branch specified.
+To use a staging server, set `GIT_BRANCH` in `config/deploy.staging.yml` under `env.clear` to the branch you're using for staging. Then you can deploy the site to a staging server using `skiff deploy --staging`, which will use the configuration in `config/deploy.staging.yml`, and start pulling updates from the branch specified.
 
 ## Flushing etag caches after changing include files
 

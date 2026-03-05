@@ -1,4 +1,4 @@
-# Deploy your site to a staging server with skiff stage
+# Deploy your site to a staging server with skiff deploy --staging
 servers:
   - 192.168.0.2
 
