@@ -50,7 +50,7 @@ First ensure that you've set `GIT_URL` to a repository address with a valid acce
 5. Update your `.kamal/secrets` to fetch from 1Password and build the `GIT_URL`:
    ```bash
    GITHUB_TOKEN=$(kamal secrets extract GITHUB_TOKEN ${SECRETS})
-   GIT_URL=https://${GITHUB_TOKEN}:@github.com/username/repo.git
+   GIT_URL=https://x-access-token:${GITHUB_TOKEN}@github.com/username/repo.git
    ```
 
 Kamal 2 uses a local registry by default (`registry.server: localhost:5555`), so you do not need to configure remote registry credentials unless you change that setting.
