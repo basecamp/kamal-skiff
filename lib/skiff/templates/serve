@@ -12,14 +12,14 @@ log() {
   fi
 }
 
-sync_continously() {
+sync_continuously() {
   sleep 5  # Wait for nginx
 
   while true; do
     if sync; then
       log "Synced."
     else
-      log "Error during poll, will retry..."
+      log "Error during sync, will retry..."
     fi
 
     sleep 10
@@ -94,6 +94,6 @@ sync_server_conf() {
 }
 
 
-# Start continously syncing in background if GIT_URL is set
-[[ "$GIT_URL" ]] && sync_continously &
+# Start continuously syncing in background if GIT_URL is set
+[[ "$GIT_URL" ]] && sync_continuously &
 nginx -g 'daemon off;'
