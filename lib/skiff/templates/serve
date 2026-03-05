@@ -26,6 +26,44 @@ polling_clone() {
   done
 }
 
+sync_server_conf() {
+  local repo_conf="$REPO_DIR/config/server.conf"
+  local site_conf="$SITE_DIR/config/server.conf"
+  local backup_conf="$SITE_DIR/config/server.conf.bak"
+
+  [ -f "$repo_conf" ] || return 0
+
+  if [ -f "$site_conf" ] && cmp -s "$repo_conf" "$site_conf"; then
+    return 0
+  fi
+
+  log "Detected change to config/server.conf, validating and reloading nginx..."
+  mkdir -p "$SITE_DIR/config"
+
+  if [ -f "$site_conf" ]; then
+    cp "$site_conf" "$backup_conf"
+  else
+    rm -f "$backup_conf"
+  fi
+
+  cp "$repo_conf" "$site_conf"
+
+  if nginx -t 2>&1 | log && nginx -s reload 2>&1 | log; then
+    rm -f "$backup_conf"
+    log "Reloaded nginx with updated server.conf."
+    return 0
+  fi
+
+  if [ -f "$backup_conf" ]; then
+    cp "$backup_conf" "$site_conf"
+    rm -f "$backup_conf"
+    log "Reverted config/server.conf to last known good version."
+  fi
+
+  log "server.conf changed, but nginx could not be restarted."
+  return 1
+}
+
 poll() {
   log "Fetching ${GIT_BRANCH:-HEAD}..."
 
@@ -47,8 +85,10 @@ poll() {
     git clone --depth 1 ${GIT_BRANCH:+--branch "$GIT_BRANCH"} "$GIT_URL" "$REPO_DIR" 2>&1 | log
   fi
 
-  # Sync to site (changes in config/ or serve require "skiff deploy")
+  # Sync to site (changes in serve require "skiff deploy")
   rsync -a --delete --exclude='config/' --exclude='serve' "$REPO_DIR/" "$SITE_DIR/"
+
+  sync_server_conf
 }
 
 # Start polling in background if GIT_URL is set
