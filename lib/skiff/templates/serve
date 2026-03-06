@@ -56,39 +56,57 @@ sync_site_assets() {
 }
 
 sync_server_conf() {
-  local repo_conf="$REPO_DIR/config/server.conf"
-  local site_conf="$SITE_DIR/config/server.conf"
-  local backup_conf="$SITE_DIR/config/server.conf.bak"
+  local repo_dir="$REPO_DIR/config"
+  local site_dir="$SITE_DIR/config"
+  local backup_dir="$SITE_DIR/config/.bak"
+  local changed=false
 
-  [ -f "$repo_conf" ] || return 0
+  mkdir -p "$site_dir"
 
-  if [ -f "$site_conf" ] && cmp -s "$repo_conf" "$site_conf"; then
-    return 0
-  fi
+  for repo_conf in "$repo_dir"/*.conf; do
+    [ -f "$repo_conf" ] || continue
+    local name=$(basename "$repo_conf")
+    local site_conf="$site_dir/$name"
 
-  log "Detected change to config/server.conf, validating and reloading nginx..."
-  mkdir -p "$SITE_DIR/config"
-
-  if [ -f "$site_conf" ]; then
-    cp "$site_conf" "$backup_conf"
-  else
-    rm -f "$backup_conf"
-  fi
-
-  cp "$repo_conf" "$site_conf"
-
-  if nginx -t 2>&1 | log && nginx -s reload 2>&1 | log; then
-    rm -f "$backup_conf"
-    log "Reloaded nginx with updated server.conf."
-    return 0
-  else
-    if [ -f "$backup_conf" ]; then
-      cp "$backup_conf" "$site_conf"
-      rm -f "$backup_conf"
-      log "Reverted config/server.conf to last known good version."
+    if [ -f "$site_conf" ] && cmp -s "$repo_conf" "$site_conf"; then
+      continue
     fi
 
-    log "server.conf changed, but nginx could not be restarted."
+    changed=true
+    break
+  done
+
+  [ "$changed" = true ] || return 0
+
+  log "Detected change to config/*.conf, validating and reloading nginx..."
+
+  # Back up current config files
+  rm -rf "$backup_dir"
+  mkdir -p "$backup_dir"
+  for f in "$site_dir"/*.conf; do
+    [ -f "$f" ] && cp "$f" "$backup_dir/"
+  done
+
+  # Copy new config files
+  for repo_conf in "$repo_dir"/*.conf; do
+    [ -f "$repo_conf" ] && cp "$repo_conf" "$site_dir/"
+  done
+
+  if nginx -t 2>&1 | log && nginx -s reload 2>&1 | log; then
+    rm -rf "$backup_dir"
+    log "Reloaded nginx with updated config."
+    return 0
+  else
+    # Restore backup
+    if [ -d "$backup_dir" ]; then
+      for f in "$backup_dir"/*.conf; do
+        [ -f "$f" ] && cp "$f" "$site_dir/"
+      done
+      rm -rf "$backup_dir"
+      log "Reverted config to last known good version."
+    fi
+
+    log "Config changed, but nginx could not be restarted."
     return 1
   fi
 }
