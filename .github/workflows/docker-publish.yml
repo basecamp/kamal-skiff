@@ -44,6 +44,12 @@ jobs:
           if [ -z "$INPUT_VALUE" ]; then
             INPUT_VALUE="${GITHUB_REF_NAME}"
           fi
+          # Validate that the tag is a valid Docker tag: 1-128 chars, [A-Za-z0-9_.-] only.
+          if ! printf '%s' "$INPUT_VALUE" | grep -qxE '[A-Za-z0-9_.-]{1,128}'; then
+            echo "Error: Invalid Docker tag value: '$INPUT_VALUE'" >&2
+            echo "Tag must match regex [A-Za-z0-9_.-]{1,128}." >&2
+            exit 1
+          fi
           echo "value=$INPUT_VALUE" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_EVENT_INPUTS_TAGINPUT: ${{ github.event.inputs.tagInput }}
