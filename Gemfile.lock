@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kamal-skiff (0.2.0)
+    kamal-skiff (0.5.0)
       kamal (~> 2.0)
       thor (~> 1.2)
 
