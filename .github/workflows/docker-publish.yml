@@ -10,6 +10,8 @@ on:
   release:
     types: [created]
 
+permissions: {}
+
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -19,16 +21,18 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@2b82ce82d56a2a04d2637cd93a637ae1b359c0a7 # v2.2.0
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@885d1462b80bc1c1c7f0b00334ad271f09369c55 # v2.10.0
       -
         name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -36,14 +40,22 @@ jobs:
       - name: Determine version tag
         id: version-tag
         run: |
-          INPUT_VALUE="${{ github.event.inputs.tagInput }}"
+          INPUT_VALUE="${GITHUB_EVENT_INPUTS_TAGINPUT}"
           if [ -z "$INPUT_VALUE" ]; then
-            INPUT_VALUE="${{ github.ref_name }}"
+            INPUT_VALUE="${GITHUB_REF_NAME}"
+          fi
+          # Validate that the tag is a valid Docker tag: 1-128 chars; first char [A-Za-z0-9_], remaining chars [A-Za-z0-9_.-].
+          if ! printf '%s' "$INPUT_VALUE" | grep -qxE '[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}'; then
+            echo "Error: Invalid Docker tag value: '$INPUT_VALUE'" >&2
+            echo "Tag must match regex [A-Za-z0-9_][A-Za-z0-9_.-]{0,127} (1-128 chars, cannot start with '.' or '-')." >&2
+            exit 1
           fi
           echo "value=$INPUT_VALUE" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_EVENT_INPUTS_TAGINPUT: ${{ github.event.inputs.tagInput }}
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@1104d471370f9806843c095c1db02b5a90c5f8b6 # v3.3.1
         with:
           context: .
           platforms: linux/amd64,linux/arm64
